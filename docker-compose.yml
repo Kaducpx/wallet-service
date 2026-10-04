@@ -50,7 +50,10 @@ services:
       - ./deploy/postgres/init:/docker-entrypoint-initdb.d:ro
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U wallet_owner -d wallet"]
+      # Checa pela rede (TCP): durante a criação inicial do banco o Postgres
+      # sobe um servidor temporário que só aceita conexão local; assim o
+      # healthcheck só passa quando o servidor definitivo estiver no ar.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U wallet_owner -d wallet"]
       interval: 2s
       timeout: 3s
       retries: 30

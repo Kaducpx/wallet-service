@@ -13,6 +13,7 @@ import (
 	"os/signal"
 	"strconv"
 	"syscall"
+	"time"
 
 	"go.uber.org/fx"
 
@@ -71,9 +72,20 @@ func runMigrate(args []string) error {
 	if url == "" {
 		return fmt.Errorf("MIGRATIONS_DATABASE_URL is required")
 	}
-	m, err := postgres.NewMigrator(url)
-	if err != nil {
-		return err
+	// Na primeira subida o Postgres reinicia uma vez depois de criar o banco.
+	// Tenta conectar por até 60s em vez de desistir na primeira falha.
+	var m *postgres.Migrator
+	var err error
+	for tentativa := 1; ; tentativa++ {
+		m, err = postgres.NewMigrator(url)
+		if err == nil {
+			break
+		}
+		if tentativa == 30 {
+			return err
+		}
+		fmt.Fprintf(os.Stderr, "migrate: banco ainda não está pronto (tentativa %d), tentando de novo...\n", tentativa)
+		time.Sleep(2 * time.Second)
 	}
 	defer m.Close()
 
