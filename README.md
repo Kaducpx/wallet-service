@@ -12,6 +12,7 @@ O foco é **nunca errar com dinheiro**, mesmo quando algo dá errado:
 - funciona com **vários servidores ao mesmo tempo** e se recupera de quedas.
 
 > As decisões técnicas estão explicadas em [ARCHITECTURE.md](ARCHITECTURE.md).
+> O guia de testes está em [TESTES.md](TESTES.md).
 
 ---
 
@@ -103,6 +104,9 @@ também sejam desligados (se você não usou esse modo, não faz diferença).
 ---
 
 ## Rodando os testes
+
+> Guia completo, com preparação das dependências, build tags, múltiplas
+> instâncias e simulações de falha: **[TESTES.md](TESTES.md)**.
 
 Os testes precisam do **Go** instalado. Rode os comandos **na pasta do projeto**.
 
@@ -443,7 +447,7 @@ já usa valores prontos; só precisa mexer se quiser mudar algo.
 | `PENDING_BACKOFF_BASE` / `PENDING_BACKOFF_MAX` | `1s` / `1m` | espera entre essas tentativas |
 | `SHUTDOWN_TIMEOUT` | `25s` | tempo para desligar com calma |
 | `DB_LOCK_TIMEOUT` | `5s` | tempo máximo esperando a vez numa carteira |
-| `FAULT_POINTS` | vazio | simula quedas (**só nos testes**) |
+| `FAULT_POINTS` | vazio | simula falhas (**só para testes**, ver [TESTES.md](TESTES.md#4-simulações-de-falha)) |
 
 Se alguma configuração estiver errada, o serviço não sobe e mostra o motivo.
 

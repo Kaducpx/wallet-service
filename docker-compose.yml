@@ -18,6 +18,8 @@ x-app-env: &app-env
   HTTP_ADDR: ":8081"
   LOG_LEVEL: ${LOG_LEVEL:-info}
   SHUTDOWN_TIMEOUT: 25s
+  # Simulação de falhas (ver TESTES.md). Vazio = desligado.
+  FAULT_POINTS: ${FAULT_POINTS:-}
 
 x-app: &app
   build: .
